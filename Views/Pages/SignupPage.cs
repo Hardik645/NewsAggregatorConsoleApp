@@ -17,8 +17,11 @@ namespace NewsAggregatorConsoleApp.Views.Pages
             string email = PromptEmail();
             string password = await PromptPasswordWithConfirmation();
 
-            ResponseMessage response = await AuthService.SignUp(username,email, password);
-            await ProcessSignupResponse(response);
+            if(await PageHelper.CheckRequiredFields("All above fields are required",username, email, password))
+            {
+                ResponseMessage response = await AuthService.SignUp(username,email, password);
+                await ProcessSignupResponse(response);
+            }
         }
 
         private static string PromptEmail()
