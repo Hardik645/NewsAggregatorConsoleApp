@@ -12,10 +12,14 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
         private readonly List<(int Id, string Title, string PublishedAt)> _headlines = [];
 
         public async Task Render()
-        {
-            PageHelper.DisplayHeader();
-            PageHelper.DisplaySubHeader("Headlines by Date Range");
-            Console.WriteLine();
+        {          
+            var categoriesResponse = await CategoryService.GetAllCategories(pageSharedStorage);
+            var categories = ParseCategories(categoriesResponse.Data);
+            categories.Insert(0, "All");
+
+            string selectedCategory = await PromptCategorySelection(categories);
+            if (selectedCategory == null)
+                return;
 
             DateOnly startDate, endDate;
             while (true)
@@ -39,12 +43,63 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                 PageHelper.ShowErrorToast("Invalid end date or end date before start date. Please try again.\n", 1500).Wait();
             }
 
-            ResponseMessage response = await NewsService.GetHeadlinesByDateRange(pageSharedStorage, startDate, endDate);
+            ResponseMessage response = await NewsService.GetHeadlinesByDateRange(
+                pageSharedStorage,
+                startDate,
+                endDate,
+                selectedCategory
+            );
             await ProcessHeadlinesResponse(response);
 
             pageSharedStorage.Headlines = _headlines;
-            pageSharedStorage.PaginatedTitle = $"Headlines by Date Range ({startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd})";
-            await paginatedHeadlinesPage.Render();            
+            pageSharedStorage.PaginatedTitle = selectedCategory == "All"
+                ? $"Headlines by Date Range ({startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd})"
+                : $"Headlines by Date Range ({startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}) - {selectedCategory.ToUpper()}";
+            await paginatedHeadlinesPage.Render();
+        }
+
+        private static List<string> ParseCategories(JsonNode? data)
+        {
+            var result = new List<string>();
+            if (data is JsonArray array)
+            {
+                foreach (var item in array)
+                {
+                    if (item is JsonObject obj)
+                    {
+                        string? name = obj["name"]?.ToString();
+                        if (!string.IsNullOrWhiteSpace(name))
+                            result.Add(name);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static async Task<string?> PromptCategorySelection(List<string> categories)
+        {
+            while (true)
+            {
+                PageHelper.DisplayHeader();
+                PageHelper.DisplaySubHeader("Headlines by Date Range");
+                PageHelper.CenterText("Select a category for headlines:\n");
+                Console.WriteLine();
+                for (int i = 0; i < categories.Count; i++)
+                {
+                    PageHelper.PrintTwoColoredTexts(PageHelper.ConsoleWidth() / 2 - 5, 5, $"{i + 1}.", $"{categories[i].ToUpper()}", ConsoleColor.Blue);
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                PageHelper.CenterText("Enter the number of your choice (or 'B' to back): ");
+                string? input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input))
+                    return null;
+                if (input.Trim().ToLower() == "b")
+                    return null;
+                if (int.TryParse(input, out int idx) && idx >= 1 && idx <= categories.Count)
+                    return categories[idx - 1];
+                await PageHelper.ShowErrorToast("Invalid selection. Please try again.");
+            }
         }
 
         private async Task ProcessHeadlinesResponse(ResponseMessage response)

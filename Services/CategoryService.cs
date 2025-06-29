@@ -24,5 +24,22 @@ namespace NewsAggregatorConsoleApp.Services
                 return new ResponseMessage { Message = $"Error adding category: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
             }
         }
+        public static async Task<ResponseMessage> GetAllCategories(PageSharedStorage pageSharedStorage)
+        {
+            try
+            {
+                ResponseMessage res = await SendRequest(() => new ApiRequest
+                {
+                    Url = "/api/categories",
+                    Method = HttpMethod.Get,
+                    Token = pageSharedStorage.User.Token
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new() { Message = $"Error fetching categories: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
+            }
+        }
     }
 }
