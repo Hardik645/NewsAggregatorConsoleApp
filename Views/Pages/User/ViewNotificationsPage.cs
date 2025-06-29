@@ -1,12 +1,13 @@
 using NewsAggregatorConsoleApp.Helper;
 using NewsAggregatorConsoleApp.Models;
 using NewsAggregatorConsoleApp.Services;
+using NewsAggregatorConsoleApp.Views.Pages.User.Common;
 using System.Net;
 using System.Text.Json.Nodes;
 
 namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
-    public class ViewNotificationsPage(PageSharedStorage pageSharedStorage) : IPage
+    public class ViewNotificationsPage(PageSharedStorage pageSharedStorage, ArticleDetailPage articleDetailPage) : IPage
     {
         private const int PageSize = 20;
         private readonly List<(string articleId, string Message, string CreatedAt)> _notifications = [];
@@ -52,7 +53,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                 }
 
                 Console.WriteLine();
-                PageHelper.CenterText("N - Next Page | P - Previous Page | B - Back", color: ConsoleColor.Blue);
+                PageHelper.CenterText("N - Next Page | P - Previous Page | V - View Headline | B - Back", color: ConsoleColor.Blue);
                 var key = Console.ReadKey(true).Key;
                 Console.WriteLine();
 
@@ -60,6 +61,8 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                     currentPage++;
                 else if (key == ConsoleKey.P && currentPage > 1)
                     currentPage--;
+                else if (key == ConsoleKey.V)
+                    await ViewHeadlineById();
                 else if (key == ConsoleKey.B)
                     break;
                 else
@@ -82,7 +85,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
 
         private static List<(string articleId, string Message, string CreatedAt)> ParseNotifications(JsonNode? data)
         {
-            var result = new List<(string Message, string CreatedAt)>();
+            var result = new List<(string articleId, string Message, string CreatedAt)>();
             if (data is JsonArray array)
             {
                 foreach (var item in array)
@@ -91,11 +94,10 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                     {
                         string message = "(No Message)";
                         string createdAt = "";
-
                         var type = obj["type"]?.ToString();
                         var article = obj["article"] as JsonObject;
                         var category = article?["category"] as JsonObject;
-                        var articleId = article?["id"]?.ToString();
+                        string articleId = article!["id"]!.ToString();
                         var articleTitle = article?["title"]?.ToString();
                         var categoryName = category?["name"]?.ToString()?.ToUpper();
 
@@ -113,6 +115,19 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                 }
             }
             return result;
+        }
+        private async Task ViewHeadlineById()
+        {
+            Console.WriteLine();
+            PageHelper.CenterText("Enter the Id of the headline to view: ");
+            var input = Console.ReadLine();
+            if (!int.TryParse(input, out int id))
+            {
+                await PageHelper.ShowErrorToast("Invalid Id. Please enter a valid number.");
+                return;
+            }
+            pageSharedStorage.ArticleId = id;
+            await articleDetailPage.Render();
         }
     }
 }

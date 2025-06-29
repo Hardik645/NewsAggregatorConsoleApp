@@ -27,6 +27,7 @@ namespace NewsAggregatorConsoleApp.Services
                 HttpResponseMessage response = request.Method switch
                 {
                     var m when m == HttpMethod.Post => await client.PostAsync(BaseUrl + request.Url, content),
+                    var m when m == HttpMethod.Put => await client.PutAsync(BaseUrl + request.Url, content),
                     var m when m == HttpMethod.Patch => await client.PatchAsync(BaseUrl + request.Url, content),
                     var m when m == HttpMethod.Delete => await client.DeleteAsync(BaseUrl + request.Url),
                     _ => await client.GetAsync(BaseUrl + request.Url)

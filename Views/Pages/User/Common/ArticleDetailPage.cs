@@ -7,20 +7,14 @@ using System.Text.Json.Nodes;
 
 namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
 {
-    public class ArticleDetailPage : IPage
+    public class ArticleDetailPage(PageSharedStorage pageSharedStorage) : IPage
     {
-        private readonly PageSharedStorage _pageSharedStorage;
         private readonly List<(string Label, string Value)> _articleFields = new();
-
-        public ArticleDetailPage(PageSharedStorage pageSharedStorage)
-        {
-            _pageSharedStorage = pageSharedStorage;
-        }
 
         public async Task Render()
         {
-            int? articleId = _pageSharedStorage.ArticleId;
-            string? title = _pageSharedStorage.PaginatedTitle ?? "";
+            int? articleId = pageSharedStorage.ArticleId;
+            string? title = pageSharedStorage.PaginatedTitle ?? "";
             bool isSavedArticleView = title.Contains("Saved");
 
             while (true)
@@ -29,15 +23,13 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
                 PageHelper.DisplaySubHeader($"Article Details (Id: {articleId})");
                 Console.WriteLine();
 
-                var response = await ArticleService.GetArticleById(_pageSharedStorage, articleId.Value);
+                var response = await ArticleService.GetArticleById(pageSharedStorage, articleId.Value);
                 await ProcessArticleResponse(response);
 
                 if (_articleFields.Count == 0)
                 {
-                    PageHelper.ShowInfoToast("No article details to display.");
+                    await PageHelper.ShowInfoToast("No article details to display.");
                     Console.WriteLine();
-                    PageHelper.CenterText("Press any key to return...");
-                    Console.ReadKey(true);
                     return;
                 }
 
@@ -141,7 +133,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
         }
         private async Task HandleFeedback(int articleId, bool isLike)
         {
-            var response = await ArticleService.SendArticleFeedback(_pageSharedStorage, articleId, isLike);
+            var response = await ArticleService.SendArticleFeedback(pageSharedStorage, articleId, isLike);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 await PageHelper.ShowSuccessToast(isLike ? "Article liked!" : "Article disliked!");
@@ -153,7 +145,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
         }
         private async Task HandleSaveArticle(int articleId)
         {
-            var response = await ArticleService.SaveArticle(_pageSharedStorage, articleId);
+            var response = await ArticleService.SaveArticle(pageSharedStorage, articleId);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 await PageHelper.ShowSuccessToast("Article saved!");
@@ -169,11 +161,11 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
         }
         private async Task<bool> HandleUnsaveArticle(int articleId)
         {
-            var response = await ArticleService.UnsaveArticle(_pageSharedStorage, articleId);
+            var response = await ArticleService.UnsaveArticle(pageSharedStorage, articleId);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 await PageHelper.ShowSuccessToast("Article removed from saved articles!");
-                _pageSharedStorage.Headlines.RemoveAll(h => h.Id == articleId);
+                pageSharedStorage.Headlines.RemoveAll(h => h.Id == articleId);
                 return true;
             }
             else if (response.StatusCode == HttpStatusCode.Conflict)

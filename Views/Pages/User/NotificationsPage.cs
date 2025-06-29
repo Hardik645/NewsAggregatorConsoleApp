@@ -43,7 +43,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
         [
             new(ConsoleKey.D1, "View Notifications", async () => await viewNotificationsPage.Render()),
             new(ConsoleKey.D2, "Configure Notifications", async () => await configureNotificationsPage.Render()),
-            new(ConsoleKey.D3, "Back", () => Task.CompletedTask)
+            new(ConsoleKey.B, "Back", () => Task.CompletedTask)
         ];
     }
 }

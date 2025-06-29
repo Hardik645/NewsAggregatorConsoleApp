@@ -35,7 +35,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
         [
             new(ConsoleKey.D1, "Today", () => todayHeadlinesPage.Render()),
             new(ConsoleKey.D2, "Date range", () => dateRangeHeadlinesPage.Render()),
-            new(ConsoleKey.D3, "Back to Home", ()=> BackToHome()),
+            new(ConsoleKey.B, "Back to Home", ()=> BackToHome()),
             new(ConsoleKey.D4, "Logout", () => Logout())
         ];
 
