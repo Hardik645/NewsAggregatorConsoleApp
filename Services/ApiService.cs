@@ -7,7 +7,6 @@ using System.Text.Json.Nodes;
 namespace NewsAggregatorConsoleApp.Services
 {
     public class ApiService
-
     {
         private static readonly HttpClient client = new();
         private static readonly string BaseUrl = "https://localhost:7239";
@@ -20,9 +19,17 @@ namespace NewsAggregatorConsoleApp.Services
                 string json = JsonSerializer.Serialize(request.Body);
                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = request.Method == HttpMethod.Post
-                    ? await client.PostAsync(BaseUrl + request.Url, content)
-                    : await client.GetAsync(BaseUrl + request.Url);
+                if (!string.IsNullOrWhiteSpace(request.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", request.Token);
+                }
+
+                HttpResponseMessage response = request.Method switch
+                {
+                    var m when m == HttpMethod.Post => await client.PostAsync(BaseUrl + request.Url, content),
+                    var m when m == HttpMethod.Patch => await client.PatchAsync(BaseUrl + request.Url, content),
+                    _ => await client.GetAsync(BaseUrl + request.Url)
+                };
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 

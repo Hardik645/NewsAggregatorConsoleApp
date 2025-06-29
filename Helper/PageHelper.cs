@@ -1,17 +1,16 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
 
 namespace NewsAggregatorConsoleApp.Helper
 {
     class PageHelper
     {
-        public static void DisplayHeader()
+        public static void DisplayHeader() 
         {
             Console.Clear();
             Random random = new();
             ConsoleColor[] colors = Enum.GetValues<ConsoleColor>();
             ConsoleColor randomColor = colors[random.Next(1, colors.Length)];
-            DrawLine(Console.WindowWidth, 0, randomColor);
+            DrawLine(ConsoleWidth(), 0, randomColor);
             Console.WriteLine("\n");
             string[] title =
             [
@@ -25,12 +24,12 @@ namespace NewsAggregatorConsoleApp.Helper
 
             CenterLines(title,0, randomColor);
             Console.WriteLine();
-            DrawLine(Console.WindowWidth, 0, randomColor);
+            DrawLine(ConsoleWidth(), 0, randomColor);
             Console.WriteLine("\n");
         }
-        public static void DrawLine(int max = int.MaxValue, int leftOffset = 0, ConsoleColor color = ConsoleColor.White)
+        public static void DrawLine(int max = int.MaxValue, int leftOffset = 0, ConsoleColor color = ConsoleColor.White, char lineSymbol = '=')
         {
-            CenterText(new string('=', Math.Min(Math.Max(Console.WindowWidth, 50), max)), leftOffset, color);
+            CenterText(new string(lineSymbol, Math.Min(Math.Max(ConsoleWidth(), 50), max)), leftOffset, color);
         }
 
         public static async Task PrintToast(string message, ConsoleColor color, int delayTime)
@@ -62,7 +61,7 @@ namespace NewsAggregatorConsoleApp.Helper
         public static void CenterText(string line, int leftOffset = 0, ConsoleColor color = ConsoleColor.White)
         {
             Console.ForegroundColor = color;
-            Console.SetCursorPosition((Console.WindowWidth - line.Length) / 2 + leftOffset, Console.CursorTop);
+            Console.SetCursorPosition((ConsoleWidth() - line.Length) / 2 + leftOffset, Console.CursorTop);
             Console.Write(line);
             Console.ResetColor();
         }
@@ -96,6 +95,33 @@ namespace NewsAggregatorConsoleApp.Helper
         public static string CenterAlignTwoTexts(string first, string second, int withSpace, int totalLength)
         {
             return JoinWithSpacing([first, JoinWithSpacing([second, " "], withSpace)], totalLength);
+        }
+
+        public static async Task<bool> CheckRequiredFields(string errorMessage, params string[] fields)
+        {
+            foreach (var field in fields)
+            {
+                if (string.IsNullOrEmpty(field))
+                {
+                    await PageHelper.ShowErrorToast(errorMessage, 2000);
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static void DisplaySubHeader(string subHeader)
+        {
+            int lineLength = subHeader.Length + 10;
+            DrawLine(lineLength, 0, lineSymbol: '-');
+            Console.WriteLine();
+            CenterText(subHeader);
+            Console.WriteLine();
+            DrawLine(lineLength, 0, lineSymbol: '-');
+            Console.WriteLine();
+        }
+        public static int ConsoleWidth()
+        {
+            return Console.WindowWidth;
         }
     }
 }

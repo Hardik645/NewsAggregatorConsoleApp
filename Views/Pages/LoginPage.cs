@@ -15,10 +15,13 @@ namespace NewsAggregatorConsoleApp.Views.Pages
 
             var (email, password) = PromptUserCredentials();
 
-            Console.WriteLine();
-            ResponseMessage response = await AuthService.Login(email, password);
+            if (await PageHelper.CheckRequiredFields("All above fields are required", email, password))
+            {
+                Console.WriteLine();
+                ResponseMessage response = await AuthService.Login(email, password);
 
-            await ProcessLoginResponse(response);
+                await ProcessLoginResponse(response);
+            }
         }
 
         private static (string Email, string Password) PromptUserCredentials()
@@ -51,5 +54,6 @@ namespace NewsAggregatorConsoleApp.Views.Pages
                 await PageHelper.ShowErrorToast($"Login failed: {response.Message}", 3000);
             }
         }
+        
     }
 }

@@ -17,8 +17,17 @@ namespace NewsAggregatorConsoleApp
                 services.AddTransient<HomePage>();
                 services.AddTransient<LoginPage>();
                 services.AddTransient<SignupPage>();
-
-
+                services.AddTransient<SourcesStatusPage>();
+                services.AddTransient<SourcesDetailPage>();
+                services.AddTransient<SourcesEditPage>();
+                services.AddTransient<AddCategoryPage>();
+                services.AddTransient<HeadlinesPage>();
+                services.AddTransient<SavedArticlesPage>();
+                services.AddTransient<SearchPage>();
+                services.AddTransient<NotificationsPage>();
+                services.AddTransient<TodayHeadlinesPage>();
+                services.AddTransient<DateRangeHeadlinesPage>();
+                
                 var serviceProvider = services.BuildServiceProvider();
 
                 var homePage = serviceProvider.GetRequiredService<HomePage>();
