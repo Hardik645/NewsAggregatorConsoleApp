@@ -47,5 +47,36 @@ namespace NewsAggregatorConsoleApp.Services
                 return new() { Message = $"Error fetching headlines: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
             }
         }
+
+        public static async Task<ResponseMessage> SearchHeadlines(
+            PageSharedStorage pageSharedStorage,
+            string query,
+            DateOnly? startDate,
+            DateOnly? endDate,
+            string sortBy)
+        {
+            try
+            {
+                var url = $"/api/news/search?query={Uri.EscapeDataString(query)}";
+                if (startDate.HasValue)
+                    url += $"&startDate={startDate:yyyy-MM-dd}";
+                if (endDate.HasValue)
+                    url += $"&endDate={endDate:yyyy-MM-dd}";
+                if (!string.IsNullOrWhiteSpace(sortBy))
+                    url += $"&sortBy={Uri.EscapeDataString(sortBy)}";
+
+                ResponseMessage res = await SendRequest(() => new ApiRequest
+                {
+                    Url = url,
+                    Method = HttpMethod.Get,
+                    Token = pageSharedStorage.User.Token
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new() { Message = $"Error searching headlines: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
+            }
+        }
     }
 }

@@ -22,8 +22,8 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
 
                 if (headlines.Count == 0)
                 {
-                    PageHelper.CenterText("No headlines to display.");
-                    Console.WriteLine();
+                    await PageHelper.ShowInfoToast("No headlines to display.");
+                    break;
                 }
                 else
                 {

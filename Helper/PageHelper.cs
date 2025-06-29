@@ -27,6 +27,22 @@ namespace NewsAggregatorConsoleApp.Helper
             DrawLine(ConsoleWidth(), 0, randomColor);
             Console.WriteLine("\n");
         }
+        public static void DisplaySubHeader(string subHeader)
+        {
+            int lineLength = subHeader.Length + 10;
+            DrawLine(lineLength, 0, lineSymbol: '-');
+            Console.WriteLine();
+            CenterText(subHeader);
+            Console.WriteLine();
+            DrawLine(lineLength, 0, lineSymbol: '-');
+            Console.WriteLine();
+        }
+        public record MenuOption(ConsoleKey Key, string Title, Func<Task> Action);
+        public static void DisplayMenu(List<MenuOption> menuOptions, int withSpace = 16, int totalLength = 20)
+        {
+            PageHelper.CenterLines([.. menuOptions.Select(option =>
+                PageHelper.CenterAlignTwoTexts($"{option.Key.ToString().Replace("D", "")}.", option.Title, withSpace, totalLength))]);
+        }
         public static void DrawLine(int max = int.MaxValue, int leftOffset = 0, ConsoleColor color = ConsoleColor.White, char lineSymbol = '=')
         {
             CenterText(new string(lineSymbol, Math.Min(Math.Max(ConsoleWidth(), 50), max)), leftOffset, color);
@@ -96,35 +112,6 @@ namespace NewsAggregatorConsoleApp.Helper
         {
             return JoinWithSpacing([first, JoinWithSpacing([second, " "], withSpace)], totalLength);
         }
-
-
-
-        public static async Task<bool> CheckRequiredFields(string errorMessage, params string[] fields)
-        {
-            foreach (var field in fields)
-            {
-                if (string.IsNullOrEmpty(field))
-                {
-                    await PageHelper.ShowErrorToast(errorMessage, 2000);
-                    return false;
-                }
-            }
-            return true;
-        }
-        public static void DisplaySubHeader(string subHeader)
-        {
-            int lineLength = subHeader.Length + 10;
-            DrawLine(lineLength, 0, lineSymbol: '-');
-            Console.WriteLine();
-            CenterText(subHeader);
-            Console.WriteLine();
-            DrawLine(lineLength, 0, lineSymbol: '-');
-            Console.WriteLine();
-        }
-        public static int ConsoleWidth()
-        {
-            return Console.WindowWidth;
-        }
         public static void PrintTwoColoredTexts(
             int leftOffset,
             int nextOffset,
@@ -144,6 +131,23 @@ namespace NewsAggregatorConsoleApp.Helper
             Console.ForegroundColor = secondColor;
             Console.Write(second);
             Console.ResetColor();
+        }
+
+        public static async Task<bool> CheckRequiredFields(string errorMessage, params string[] fields)
+        {
+            foreach (var field in fields)
+            {
+                if (string.IsNullOrEmpty(field))
+                {
+                    await PageHelper.ShowErrorToast(errorMessage, 2000);
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static int ConsoleWidth()
+        {
+            return Console.WindowWidth;
         }
     }
 }

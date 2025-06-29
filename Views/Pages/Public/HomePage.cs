@@ -19,7 +19,6 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
         NotificationsPage notificationsPage
     ) : IPage
     {
-        private record MenuOption(ConsoleKey Key, string Title, Func<Task> Action);
 
         public async Task Render()
         {
@@ -36,9 +35,9 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
                     : GetGuestMenu();
 
                 if (pageManager.User.Role == "User")
-                    DisplayMenu(menuOptions);
+                    PageHelper.DisplayMenu(menuOptions);
                 else
-                    DisplayMenu(menuOptions, 45, 47);
+                    PageHelper.DisplayMenu(menuOptions, 45, 47);
 
                 Console.WriteLine();
                 PageHelper.CenterText("Press the key for your choice: ");
@@ -47,7 +46,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
             }
         }
 
-        private List<MenuOption> GetUserMenu() =>
+        private List<PageHelper.MenuOption> GetUserMenu() =>
         [
             new(ConsoleKey.D1, "Headlines", () => headlinesPage.Render()),
             new(ConsoleKey.D2, "Saved Articles", () => savedArticlesPage.Render()),
@@ -57,7 +56,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
             new(ConsoleKey.D6, "Exit", () => Exit())
         ];
 
-        private List<MenuOption> GetAdminMenu() =>
+        private List<PageHelper.MenuOption> GetAdminMenu() =>
         [
             new(ConsoleKey.D1, "View the list of external servers and status", () => sourcesStatusPage.Render()),
             new(ConsoleKey.D2, "View the external server’s details", () => sourcesDetailPage.Render()),
@@ -67,20 +66,14 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
             new(ConsoleKey.D6, "Exit", () => Exit())
         ];
 
-        private List<MenuOption> GetGuestMenu() =>
+        private List<PageHelper.MenuOption> GetGuestMenu() =>
         [
             new(ConsoleKey.D1, "Login", () => loginPage.Render()),
             new(ConsoleKey.D2, "Sign Up", () => signupPage.Render()),
             new(ConsoleKey.D3, "Exit", () => Exit())
         ];
 
-        private static void DisplayMenu(List<MenuOption> menuOptions, int withSpace = 16, int totalLength = 20)
-        {
-            PageHelper.CenterLines([.. menuOptions.Select(option =>
-                PageHelper.CenterAlignTwoTexts($"{option.Key.ToString().Replace("D", "")}.", option.Title, withSpace, totalLength))]);
-        }
-
-        private static async Task<bool> ProcessSelection(ConsoleKey key, List<MenuOption> menuOptions)
+        private static async Task<bool> ProcessSelection(ConsoleKey key, List<PageHelper.MenuOption> menuOptions)
         {
             var selectedOption = menuOptions.FirstOrDefault(option => option.Key == key);
 

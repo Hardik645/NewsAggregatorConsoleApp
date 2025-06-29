@@ -35,9 +35,10 @@ namespace NewsAggregatorConsoleApp
                 services.AddTransient<ArticleDetailPage>();
 
                 services.AddTransient<SavedArticlesPage>();
-
                 services.AddTransient<SearchPage>();
 
+                services.AddTransient<ViewNotificationsPage>();
+                services.AddTransient<ConfigureNotificationsPage>();
                 services.AddTransient<NotificationsPage>();
 
                 var serviceProvider = services.BuildServiceProvider();

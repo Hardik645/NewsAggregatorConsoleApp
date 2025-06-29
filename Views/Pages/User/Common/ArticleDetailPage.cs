@@ -20,6 +20,9 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
         public async Task Render()
         {
             int? articleId = _pageSharedStorage.ArticleId;
+            string? title = _pageSharedStorage.PaginatedTitle ?? "";
+            bool isSavedArticleView = title.Contains("Saved");
+
             while (true)
             {
                 PageHelper.DisplayHeader();
@@ -41,7 +44,15 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
                 DisplayFields();
 
                 Console.WriteLine();
-                PageHelper.CenterText("L - Like | D - Dislike | S - Save Article | B - Back", color: ConsoleColor.Blue);
+                if (isSavedArticleView)
+                {
+                    PageHelper.CenterText("L - Like | D - Dislike | U - Unsave Article | B - Back", color: ConsoleColor.Blue);
+                }
+                else
+                {
+
+                    PageHelper.CenterText("L - Like | D - Dislike | S - Save Article | B - Back", color: ConsoleColor.Blue);
+                }
                 var key = Console.ReadKey(true).Key;
                 Console.WriteLine();
 
@@ -53,9 +64,14 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
                 {
                     await HandleFeedback(articleId.Value, false);
                 }
-                else if (key == ConsoleKey.S)
+                else if (key == ConsoleKey.S && !isSavedArticleView)
                 {
                     await HandleSaveArticle(articleId.Value);
+                }
+                else if (key == ConsoleKey.U && isSavedArticleView)
+                {
+                    if (await HandleUnsaveArticle(articleId.Value))
+                        break;
                 }
                 else if (key == ConsoleKey.B)
                 {
@@ -150,6 +166,25 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
             {
                 await PageHelper.ShowErrorToast("Failed to save article");
             }
+        }
+        private async Task<bool> HandleUnsaveArticle(int articleId)
+        {
+            var response = await ArticleService.UnsaveArticle(_pageSharedStorage, articleId);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                await PageHelper.ShowSuccessToast("Article removed from saved articles!");
+                _pageSharedStorage.Headlines.RemoveAll(h => h.Id == articleId);
+                return true;
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                await PageHelper.ShowInfoToast("Article is not in your saved articles.");
+            }
+            else
+            {
+                await PageHelper.ShowErrorToast("Failed to remove article from saved articles.");
+            }
+            return false;
         }
     }
 }
