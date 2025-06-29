@@ -19,7 +19,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
 
             PageHelper.CenterText("Enter search query (or '/exit' to cancel): ");
             var query = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(query) || query.Trim().ToLower() == "/exit")
+            if (string.IsNullOrWhiteSpace(query) || query.Trim().Equals("/exit", StringComparison.CurrentCultureIgnoreCase))
                 return;
 
             DateOnly? startDate = null, endDate = null;
@@ -55,7 +55,6 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                 PageHelper.ShowErrorToast("Invalid end date format. Please try again.\n", 1500).Wait();
             }
 
-            string[] sortOptions = ["title", "date"];
             PageHelper.CenterText("Sort by: 1. Title  2. Date (default: Date)");
             var sortInput = Console.ReadLine();
             string sortBy = (sortInput == "1" || sortInput?.ToLower() == "title") ? "title" : "date";

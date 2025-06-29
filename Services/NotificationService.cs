@@ -74,7 +74,7 @@ namespace NewsAggregatorConsoleApp.Services
             try
             {
                 string url = "/api/notifications/config/keywords";
-                var body = new { keywords = keywords };
+                var body = new { keywords };
                 ResponseMessage res = await SendRequest(() => new ApiRequest
                 {
                     Url = url,

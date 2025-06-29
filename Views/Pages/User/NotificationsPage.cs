@@ -3,7 +3,6 @@ using NewsAggregatorConsoleApp.Helper;
 namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
     public class NotificationsPage(
-        PageSharedStorage pageSharedStorage,
         ViewNotificationsPage viewNotificationsPage,
         ConfigureNotificationsPage configureNotificationsPage
     ) : IPage

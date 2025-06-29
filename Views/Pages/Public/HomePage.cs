@@ -1,7 +1,6 @@
 ﻿using NewsAggregatorConsoleApp.Helper;
 using NewsAggregatorConsoleApp.Views.Pages.Admin;
 using NewsAggregatorConsoleApp.Views.Pages.User;
-using System.Linq;
 
 namespace NewsAggregatorConsoleApp.Views.Pages.Public
 {

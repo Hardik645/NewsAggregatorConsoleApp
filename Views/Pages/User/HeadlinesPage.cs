@@ -71,7 +71,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
             pageSharedStorage.IsAuthenticated = false;
         }
 
-        private async Task BackToHome()
+        private static async Task BackToHome()
         {
             Console.WriteLine();
             await PageHelper.ShowInfoToast("Going back to Home...");

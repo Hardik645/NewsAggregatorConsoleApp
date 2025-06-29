@@ -17,7 +17,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
             var categories = ParseCategories(categoriesResponse.Data);
             categories.Insert(0, "All");
 
-            string selectedCategory = await PromptCategorySelection(categories);
+            string? selectedCategory = await PromptCategorySelection(categories);
             if (selectedCategory == null)
                 return;
 
@@ -94,7 +94,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                 string? input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input))
                     return null;
-                if (input.Trim().ToLower() == "b")
+                if (input.Trim().Equals("b", StringComparison.CurrentCultureIgnoreCase))
                     return null;
                 if (int.TryParse(input, out int idx) && idx >= 1 && idx <= categories.Count)
                     return categories[idx - 1];

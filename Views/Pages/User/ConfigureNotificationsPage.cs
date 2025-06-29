@@ -2,7 +2,6 @@ using NewsAggregatorConsoleApp.Helper;
 using NewsAggregatorConsoleApp.Services;
 using System.Net;
 using System.Text.Json.Nodes;
-using System.Xml.Linq;
 
 namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
