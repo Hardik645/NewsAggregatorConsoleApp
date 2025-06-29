@@ -32,6 +32,7 @@ namespace NewsAggregatorConsoleApp
                 services.AddTransient<TodayHeadlinesPage>();
                 services.AddTransient<DateRangeHeadlinesPage>();
                 services.AddTransient<PaginatedHeadlinesPage>();
+                services.AddTransient<ArticleDetailPage>();
 
                 services.AddTransient<SavedArticlesPage>();
 

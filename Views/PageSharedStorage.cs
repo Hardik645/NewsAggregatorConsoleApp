@@ -9,6 +9,7 @@ namespace NewsAggregatorConsoleApp.Views
         public int ConsoleWidth { get; }
         public List<(int Id, string Title, string PublishedAt)> Headlines { get; set; } = [];
         public string PaginatedTitle { get; set; } = string.Empty;
+        public int? ArticleId { get; set; }
 
         public PageSharedStorage()
         {

@@ -97,6 +97,8 @@ namespace NewsAggregatorConsoleApp.Helper
             return JoinWithSpacing([first, JoinWithSpacing([second, " "], withSpace)], totalLength);
         }
 
+
+
         public static async Task<bool> CheckRequiredFields(string errorMessage, params string[] fields)
         {
             foreach (var field in fields)
@@ -122,6 +124,26 @@ namespace NewsAggregatorConsoleApp.Helper
         public static int ConsoleWidth()
         {
             return Console.WindowWidth;
+        }
+        public static void PrintTwoColoredTexts(
+            int leftOffset,
+            int nextOffset,
+            string first,
+            string second,
+            ConsoleColor firstColor = ConsoleColor.White,
+            ConsoleColor secondColor = ConsoleColor.White)
+        {
+            Console.SetCursorPosition(leftOffset, Console.CursorTop);
+
+            Console.ForegroundColor = firstColor;
+            Console.Write(first);
+            Console.ResetColor();
+
+            Console.Write(new string(' ', nextOffset-first.Length));
+
+            Console.ForegroundColor = secondColor;
+            Console.Write(second);
+            Console.ResetColor();
         }
     }
 }
