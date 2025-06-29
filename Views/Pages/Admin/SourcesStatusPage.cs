@@ -4,7 +4,7 @@ using NewsAggregatorConsoleApp.Services;
 using System.Net;
 using System.Text.Json.Nodes;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.Admin
 {
     public class SourcesStatusPage(PageSharedStorage pageSharedStorage) : IPage
     {
@@ -65,7 +65,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages
                         string apiUrl = obj["apiUrl"]?.ToString() ?? "";
                         string[] urlParts = apiUrl.Split('/');
                         string url = urlParts.Length > 2 ? urlParts[2] : "";
-                        string status = (obj["isActive"]?.GetValue<bool>() ?? false) ? "Online" : "Offline";
+                        string status = obj["isActive"]?.GetValue<bool>() ?? false ? "Online" : "Offline";
                         string lastAccessDate = "";
                         if (DateTime.TryParse(obj["lastAccessedDate"]?.ToString(), out var dt))
                         {

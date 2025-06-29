@@ -1,7 +1,9 @@
 ﻿using NewsAggregatorConsoleApp.Helper;
+using NewsAggregatorConsoleApp.Views.Pages.Admin;
+using NewsAggregatorConsoleApp.Views.Pages.User;
 using System.Linq;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.Common
 {
     public class HomePage(PageSharedStorage pageManager, LoginPage loginPage, SignupPage signupPage, SourcesStatusPage sourcesStatusPage, SourcesDetailPage sourcesDetailPage, SourcesEditPage sourcesEditPage, AddCategoryPage addCategoryPage, HeadlinesPage headlinesPage, SavedArticlesPage savedArticlesPage, SearchPage searchPage, NotificationsPage notificationsPage) : IPage
     {

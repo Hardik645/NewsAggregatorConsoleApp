@@ -4,7 +4,7 @@ using NewsAggregatorConsoleApp.Services;
 using System.Net;
 using System.Text.Json.Nodes;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
     public class TodayHeadlinesPage(PageSharedStorage pageSharedStorage) : IPage
     {
@@ -22,15 +22,16 @@ namespace NewsAggregatorConsoleApp.Views.Pages
             if (_headlines.Count == 0)
             {
                 PageHelper.CenterText("No headlines found for today.");
+                Console.WriteLine();
             }
             else
             {
-                PageHelper.CenterText(PageHelper.JoinWithSpacing(["Id", "Title", "Published At\n"], PageHelper.ConsoleWidth() - 20), color: ConsoleColor.Blue);
+                PageHelper.CenterText(PageHelper.JoinWithSpacing(["Id", "Title", "Published At\n"], PageHelper.ConsoleWidth()-10), color: ConsoleColor.Blue);
                 PageHelper.DrawLine(max: PageHelper.ConsoleWidth(), lineSymbol: '-');
                 Console.WriteLine();
                 foreach (var (id, title, publishedAt) in _headlines)
                 {
-                    string displayTitle = title.Length > PageHelper.ConsoleWidth() - 30 ? title[..(PageHelper.ConsoleWidth() - 30)] + "..." : title;
+                    string displayTitle = title.Length > PageHelper.ConsoleWidth() - 35 ? title[..(PageHelper.ConsoleWidth() - 35)] + "..." : title;
                     PageHelper.CenterText(PageHelper.JoinWithSpacing([id.ToString(), displayTitle, $"{publishedAt}\n"], PageHelper.ConsoleWidth() - 10));
                 }
             }

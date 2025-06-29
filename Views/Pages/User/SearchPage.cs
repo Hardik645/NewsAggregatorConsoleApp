@@ -1,13 +1,13 @@
 using NewsAggregatorConsoleApp.Helper;
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
-    public class NotificationsPage(PageSharedStorage pageSharedStorage) : IPage
+    public class SearchPage(PageSharedStorage pageSharedStorage) : IPage
     {
         public async Task Render()
         {
             PageHelper.DisplayHeader();
-            PageHelper.CenterText("Notifications Page\n");
-            // TODO: Implement notifications logic
+            PageHelper.CenterText("Search Page\n");
+            // TODO: Implement search logic
             Console.WriteLine();
             PageHelper.CenterText("Press any key to return...");
             Console.ReadKey();

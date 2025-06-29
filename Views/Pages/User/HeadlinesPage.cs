@@ -1,6 +1,6 @@
 ﻿using NewsAggregatorConsoleApp.Helper;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
     public class HeadlinesPage(
         PageSharedStorage pageSharedStorage,

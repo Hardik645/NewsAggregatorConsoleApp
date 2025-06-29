@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NewsAggregatorConsoleApp.Views;
-using NewsAggregatorConsoleApp.Views.Pages;
+using NewsAggregatorConsoleApp.Views.Pages.Admin;
+using NewsAggregatorConsoleApp.Views.Pages.Common;
+using NewsAggregatorConsoleApp.Views.Pages.User;
 
 namespace NewsAggregatorConsoleApp
 {

@@ -3,7 +3,7 @@ using NewsAggregatorConsoleApp.Models;
 using NewsAggregatorConsoleApp.Services;
 using System.Net;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.Admin
 {
     public class AddCategoryPage(PageSharedStorage pageSharedStorage) : IPage
     {

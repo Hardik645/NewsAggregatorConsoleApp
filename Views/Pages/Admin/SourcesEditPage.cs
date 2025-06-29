@@ -4,7 +4,7 @@ using NewsAggregatorConsoleApp.Services;
 using System.Net;
 using System.Text.Json.Nodes;
 
-namespace NewsAggregatorConsoleApp.Views.Pages
+namespace NewsAggregatorConsoleApp.Views.Pages.Admin
 {
     public class SourcesEditPage(PageSharedStorage pageSharedStorage) : IPage
     {
