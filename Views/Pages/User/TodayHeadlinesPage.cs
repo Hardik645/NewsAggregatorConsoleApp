@@ -1,44 +1,25 @@
 using NewsAggregatorConsoleApp.Helper;
 using NewsAggregatorConsoleApp.Models;
 using NewsAggregatorConsoleApp.Services;
+using NewsAggregatorConsoleApp.Views.Pages.User.Common;
 using System.Net;
 using System.Text.Json.Nodes;
 
 namespace NewsAggregatorConsoleApp.Views.Pages.User
 {
-    public class TodayHeadlinesPage(PageSharedStorage pageSharedStorage) : IPage
+    public class TodayHeadlinesPage(PageSharedStorage pageSharedStorage, PaginatedHeadlinesPage paginatedHeadlinesPage) : IPage
     {
         private readonly List<(int Id, string Title, string PublishedAt)> _headlines = [];
 
         public async Task Render()
         {
-            PageHelper.DisplayHeader();
-            PageHelper.DisplaySubHeader("Today's Headlines");
-            Console.WriteLine();
-
             ResponseMessage response = await NewsService.GetTodayHeadlines(pageSharedStorage);
             await ProcessHeadlinesResponse(response);
-
-            if (_headlines.Count == 0)
-            {
-                PageHelper.CenterText("No headlines found for today.");
-                Console.WriteLine();
-            }
-            else
-            {
-                PageHelper.CenterText(PageHelper.JoinWithSpacing(["Id", "Title", "Published At\n"], PageHelper.ConsoleWidth()-10), color: ConsoleColor.Blue);
-                PageHelper.DrawLine(max: PageHelper.ConsoleWidth(), lineSymbol: '-');
-                Console.WriteLine();
-                foreach (var (id, title, publishedAt) in _headlines)
-                {
-                    string displayTitle = title.Length > PageHelper.ConsoleWidth() - 35 ? title[..(PageHelper.ConsoleWidth() - 35)] + "..." : title;
-                    PageHelper.CenterText(PageHelper.JoinWithSpacing([id.ToString(), displayTitle, $"{publishedAt}\n"], PageHelper.ConsoleWidth() - 10));
-                }
-            }
-
-            Console.WriteLine();
-            PageHelper.CenterText("Press any key to return...");
-            Console.ReadKey();
+            
+            pageSharedStorage.Headlines = _headlines;
+            pageSharedStorage.PaginatedTitle = "Today's Headlines";
+            await paginatedHeadlinesPage.Render();
+            
         }
 
         private async Task ProcessHeadlinesResponse(ResponseMessage response)

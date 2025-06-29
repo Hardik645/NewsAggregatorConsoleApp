@@ -7,6 +7,8 @@ namespace NewsAggregatorConsoleApp.Views
         public bool IsAuthenticated { get; set; }
         public User User { get; set; }
         public int ConsoleWidth { get; }
+        public List<(int Id, string Title, string PublishedAt)> Headlines { get; set; } = [];
+        public string PaginatedTitle { get; set; } = string.Empty;
 
         public PageSharedStorage()
         {
@@ -16,7 +18,7 @@ namespace NewsAggregatorConsoleApp.Views
             {
                 UserId = new Guid("C4018D88-BDB6-4BB3-B6C4-2AC3F40E1B18"),
                 Role = "User",
-                Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNjczMTRhMS0zNjgyLTQ5MDgtYjg1Yy0zMzk3YmFjZjQ0MDIiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzUwODA5NzU4fQ.wAKW69XWj8t7mdoT-ckIW2F4BWofV5wCijKvwANFUgs"
+                Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZDhlNDU3OS1jZGM0LTRhYWQtYTJkNi1hN2VhYjM2NmIxZWUiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzUxMjA2Nzk2fQ.jVzeBO3g6xGaywWEnhhkdlA4HqaJNuYM8g9iAzzwimk"
             };
             //User = new User()
             //{

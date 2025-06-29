@@ -3,7 +3,7 @@ using NewsAggregatorConsoleApp.Models;
 using NewsAggregatorConsoleApp.Services;
 using System.Net;
 
-namespace NewsAggregatorConsoleApp.Views.Pages.Common
+namespace NewsAggregatorConsoleApp.Views.Pages.Public
 {
     public class LoginPage(PageSharedStorage pageManager) : IPage
     {
