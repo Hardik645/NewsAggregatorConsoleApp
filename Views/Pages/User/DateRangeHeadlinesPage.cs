@@ -68,7 +68,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
                     if (item is JsonObject obj)
                     {
                         string? name = obj["name"]?.ToString();
-                        if (!string.IsNullOrWhiteSpace(name))
+                        if (!string.IsNullOrWhiteSpace(name) && bool.TryParse(obj["isHidden"]?.ToString(), out bool isHidden) && !isHidden)
                             result.Add(name);
                     }
                 }

@@ -15,7 +15,10 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
         HeadlinesPage headlinesPage,
         SavedArticlesPage savedArticlesPage,
         SearchPage searchPage,
-        NotificationsPage notificationsPage
+        NotificationsPage notificationsPage,
+        ViewReportedArticlePage viewReportedArticlePage,
+        ToggleCategoryVisibilityPage toggleCategoryVisibilityPage,
+        ManageHiddenKeywordsPage manageHiddenKeywordsPage 
     ) : IPage
     {
 
@@ -61,8 +64,11 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
             new(ConsoleKey.D2, "View the external server’s details", () => sourcesDetailPage.Render()),
             new(ConsoleKey.D3, "Update/Edit the external server’s details", () => sourcesEditPage.Render()),
             new(ConsoleKey.D4, "Add new News Category", () => addCategoryPage.Render()),
-            new(ConsoleKey.D5, "Logout", () => Logout()),
-            new(ConsoleKey.D6, "Exit", () => Exit())
+            new(ConsoleKey.D5, "View all reported articles", () => viewReportedArticlePage.Render()),
+            new(ConsoleKey.D6, "Toggle Category Visibility", () => toggleCategoryVisibilityPage.Render()),
+            new(ConsoleKey.D7, "Manage Hidden Keywords", () => manageHiddenKeywordsPage.Render()),
+            new(ConsoleKey.D8, "Logout", () => Logout()),
+            new(ConsoleKey.D9, "Exit", () => Exit())
         ];
 
         private List<PageHelper.MenuOption> GetGuestMenu() =>

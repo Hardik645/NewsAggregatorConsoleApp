@@ -26,6 +26,9 @@ namespace NewsAggregatorConsoleApp
                 services.AddTransient<SourcesDetailPage>();
                 services.AddTransient<SourcesEditPage>();
                 services.AddTransient<AddCategoryPage>();
+                services.AddTransient<ViewReportedArticlePage>();
+                services.AddTransient<ToggleCategoryVisibilityPage>();
+                services.AddTransient<ManageHiddenKeywordsPage>();
 
 
                 services.AddTransient<HeadlinesPage>();

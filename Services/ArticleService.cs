@@ -80,6 +80,24 @@ namespace NewsAggregatorConsoleApp.Services
                 return new() { Message = $"Error fetching article: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
             }
         }
+        private static async Task<ResponseMessage> ReportArticle(PageSharedStorage pageSharedStorage, int articleId)
+        {
+            try
+            {
+                string url = $"/api/articles/{articleId}/feedback?isReported=true";
+                ResponseMessage res = await SendRequest(() => new ApiRequest
+                {
+                    Url = url,
+                    Method = HttpMethod.Post,
+                    Token = pageSharedStorage.User.Token
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new() { Message = $"Error sending feedback: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
+            }
+        }
         public static async Task<ResponseMessage> GetSavedArticles(PageSharedStorage pageSharedStorage)
         {
             try
@@ -96,6 +114,34 @@ namespace NewsAggregatorConsoleApp.Services
             catch (Exception ex)
             {
                 return new() { Message = $"Error fetching saved articles: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
+            }
+        }
+        public static async Task<ResponseMessage> GetReportedArticles(PageSharedStorage pageSharedStorage)
+        {
+            string url = $"/api/articles/reportedArticles";
+            return await ApiService.SendRequest(() => new ApiRequest
+            {
+                Url = url,
+                Method = HttpMethod.Get,
+                Token = pageSharedStorage.User.Token
+            });
+        }
+        public static async Task<ResponseMessage> HideArticle(PageSharedStorage pageSharedStorage, int articleId)
+        {
+            try
+            {
+                string url = $"/api/articles/hideArticles/{articleId}";
+                ResponseMessage res = await SendRequest(() => new ApiRequest
+                {
+                    Url = url,
+                    Method = HttpMethod.Post,
+                    Token = pageSharedStorage.User.Token
+                });
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new() { Message = $"Error hiding article: {ex.Message}", StatusCode = HttpStatusCode.BadRequest };
             }
         }
 
@@ -168,6 +214,20 @@ namespace NewsAggregatorConsoleApp.Services
             }
             return false;
         }
+        public static async Task<bool> HandleReportArticle(PageSharedStorage pageSharedStorage, int articleId)
+        {
+            var response = await ArticleService.ReportArticle(pageSharedStorage, articleId);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                await PageHelper.ShowSuccessToast("Article Reported Sucessfully");
+                return true;
+            }
+            else
+            {
+                await PageHelper.ShowErrorToast("Failed to report article.");
+            }
+            return false;
+        }
         public static async Task<List<(string Label, string Value)>> ProcessArticleByIdResponse(PageSharedStorage pageSharedStorage, int articleId)
         {
             var response = await GetArticleById(pageSharedStorage, articleId);
@@ -206,6 +266,24 @@ namespace NewsAggregatorConsoleApp.Services
             }
             return _articleFields;
         }
-        
+        public static List<(string ArticleId, string Title, string ReportedCount)> ParseReportedArticles(JsonNode? data)
+        {
+            var result = new List<(string, string, string)>();
+            if (data is JsonArray array)
+            {
+                foreach (var item in array)
+                {
+                    if (item is JsonObject article)
+                    {
+                        string id = article["id"]?.ToString() ?? "(No ID)";
+                        string title = article["title"]?.ToString() ?? "(No Title)";
+                        string reportedCount = article["reportCount"]?.ToString() ?? "0";
+                        result.Add((id, title, reportedCount));
+                    }
+                }
+            }
+            return result;
+        }
+
     }
 }

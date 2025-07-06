@@ -37,12 +37,12 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
                 Console.WriteLine();
                 if (isSavedArticleView)
                 {
-                    PageHelper.CenterText("L - Like | D - Dislike | U - Unsave Article | B - Back", color: ConsoleColor.Blue);
+                    PageHelper.CenterText("L - Like | D - Dislike | U - Unsave Article | R - Report | B - Back", color: ConsoleColor.Blue);
                 }
                 else
                 {
 
-                    PageHelper.CenterText("L - Like | D - Dislike | S - Save Article | B - Back", color: ConsoleColor.Blue);
+                    PageHelper.CenterText("L - Like | D - Dislike | S - Save Article | R - Report | B - Back", color: ConsoleColor.Blue);
                 }
                 var key = Console.ReadKey(true).Key;
                 Console.WriteLine();
@@ -62,6 +62,11 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User.Common
                 else if (key == ConsoleKey.U && isSavedArticleView)
                 {
                     if (await ArticleService.HandleUnsaveArticle(pageSharedStorage, articleId.Value))
+                        break;
+                }
+                else if (key == ConsoleKey.R)
+                {
+                    if (await ArticleService.HandleReportArticle(pageSharedStorage, articleId.Value))
                         break;
                 }
                 else if (key == ConsoleKey.B)

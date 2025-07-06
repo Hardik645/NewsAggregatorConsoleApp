@@ -18,8 +18,8 @@ namespace NewsAggregatorConsoleApp.Views
             User = new User()
             {
                 UserId = new Guid("C4018D88-BDB6-4BB3-B6C4-2AC3F40E1B18"),
-                Role = "User",
-                Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZDhlNDU3OS1jZGM0LTRhYWQtYTJkNi1hN2VhYjM2NmIxZWUiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzUxMjA2Nzk2fQ.jVzeBO3g6xGaywWEnhhkdlA4HqaJNuYM8g9iAzzwimk"
+                Role = "Admin",
+                Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZjY5YWFhNC1lZTA3LTQ5OWQtYWE0Yi0yOWFhOTYzYTZhNzciLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3NTE4MzIzNTh9.RInQ5tc9yhhATnnTDLzHfN4NdoK-uwWa2onAB8Qh2RY"
             };
             //User = new User()
             //{
