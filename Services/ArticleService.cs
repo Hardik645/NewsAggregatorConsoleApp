@@ -12,7 +12,7 @@ namespace NewsAggregatorConsoleApp.Services
         {
             try
             {
-                string url = $"/api/articles/savedArticles?articleId={articleId}";
+                string url = $"/api/articles/saveArticle?articleId={articleId}";
                 ResponseMessage res = await SendRequest(() => new ApiRequest
                 {
                     Url = url,
