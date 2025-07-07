@@ -1,4 +1,5 @@
 ﻿using NewsAggregatorConsoleApp.Helper;
+using NewsAggregatorConsoleApp.Utils;
 using NewsAggregatorConsoleApp.Views.Pages.Admin;
 using NewsAggregatorConsoleApp.Views.Pages.User;
 
@@ -28,23 +29,32 @@ namespace NewsAggregatorConsoleApp.Views.Pages.Public
 
             while (!exit)
             {
-                PageHelper.DisplayHeader();
-                PageHelper.CenterText("Welcome to News Aggregator\n");
-                Console.WriteLine();
+                try
+                {
+                    PageHelper.DisplayHeader();
+                    PageHelper.CenterText("Welcome to News Aggregator\n");
+                    Console.WriteLine();
 
-                var menuOptions = pageManager.IsAuthenticated
-                    ? pageManager.User.Role == "User" ? GetUserMenu() : GetAdminMenu()
-                    : GetGuestMenu();
+                    var menuOptions = pageManager.IsAuthenticated
+                        ? pageManager.User.Role == "User" ? GetUserMenu() : GetAdminMenu()
+                        : GetGuestMenu();
 
-                if (pageManager.User.Role == "User")
-                    PageHelper.DisplayMenu(menuOptions);
-                else
-                    PageHelper.DisplayMenu(menuOptions, 45, 47);
+                    if (pageManager.User.Role == "User")
+                        PageHelper.DisplayMenu(menuOptions);
+                    else
+                        PageHelper.DisplayMenu(menuOptions, 45, 47);
 
-                Console.WriteLine();
-                PageHelper.CenterText("Press the key for your choice: ");
-                var keyInfo = Console.ReadKey(true);
-                exit = await ProcessSelection(keyInfo.Key, menuOptions);
+                    Console.WriteLine();
+                    PageHelper.CenterText("Press the key for your choice: ");
+                    var keyInfo = Console.ReadKey(true);
+                    exit = await ProcessSelection(keyInfo.Key, menuOptions);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex);
+                    Console.WriteLine();
+                    await PageHelper.ShowErrorToast($"Unkown error occurred!", 3000);
+                }
             }
         }
 

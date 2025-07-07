@@ -12,7 +12,7 @@ namespace NewsAggregatorConsoleApp.Views.Pages.User
         private readonly List<(int Id, string Title, string PublishedAt)> _headlines = [];
 
         public async Task Render()
-        {   
+        {
             var categoriesResponse = await CategoryService.GetAllCategories(pageSharedStorage);
             var categories = ParseCategories(categoriesResponse.Data);
             categories.Insert(0, "All");

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NewsAggregatorConsoleApp.Utils;
 using NewsAggregatorConsoleApp.Views;
 using NewsAggregatorConsoleApp.Views.Pages.Admin;
 using NewsAggregatorConsoleApp.Views.Pages.Public;
@@ -52,6 +53,7 @@ namespace NewsAggregatorConsoleApp
             }
             catch (Exception ex)
             {
+                ExceptionLogger.LogException(ex);
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             }
         }
